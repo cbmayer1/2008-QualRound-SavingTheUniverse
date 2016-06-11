@@ -53,7 +53,50 @@ public class SavingTheUniverse {
 	
 	private int solveThisCase(Vector<String> searchEngineList, Vector<String> queryList) {
 		
-		return 13;
+		String currentQuery = "", currentSearchEngine = "";
+		int index = 0, switchCount = 0, queryListLength = queryList.size();
+		
+		while (index < queryListLength) {
+			
+			currentQuery = queryList.get(index);
+			
+			// Is it time to pick another search engine?
+			if (currentSearchEngine.isEmpty() || currentSearchEngine.equals(currentQuery)) {
+				
+				int maxDistanceFound = Integer.MIN_VALUE;
+				String searchEnginePicked = "";
+				
+				// If currentSearchEngine is null, we're just getting started and need to pick our
+				// first search engine. This pick doesn't count against the switchCount.
+				// If not doing first pick, then increment switchCount by 1.
+				switchCount = currentSearchEngine.isEmpty() ? 0 : switchCount + 1;
+				
+				// Find a new search engine.
+				for (String possibleSearchEngine : searchEngineList) {
+					
+					if(!possibleSearchEngine.equals(currentSearchEngine)) {
+						
+						// If the possibleSearchEngine doesn't appear in queryList, then distance will be set to -1 
+						int distance = queryList.indexOf(possibleSearchEngine, index);
+						distance = distance == -1 ? Integer.MAX_VALUE : distance;
+						
+						// If distance is greater than any seen so far, set maxDistanceFound and searchEnginePicked.
+						if(distance > maxDistanceFound) {
+							maxDistanceFound = distance;
+							searchEnginePicked = possibleSearchEngine;
+						}
+					}
+				}
+				
+				// Set currentSearchEngine to searchEnginePicked.
+				currentSearchEngine = searchEnginePicked;
+				// Increase index to the position of searchEnginePicked. No reason to scan anything between
+				// index and the position of the searchEnginePicked as we know we won't be switching.
+				index =  maxDistanceFound == Integer.MAX_VALUE ? maxDistanceFound : index + maxDistanceFound;
+			}
+		}
+		
+		return switchCount;
 	}
 	
 	
