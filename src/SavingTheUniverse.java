@@ -63,7 +63,7 @@ public class SavingTheUniverse {
 			// Is it time to pick another search engine?
 			if (currentSearchEngine.isEmpty() || currentSearchEngine.equals(currentQuery)) {
 				
-				int maxDistanceFound = Integer.MIN_VALUE;
+				int maxIndexFound = Integer.MIN_VALUE;
 				String searchEnginePicked = "";
 				
 				// If currentSearchEngine is null, we're just getting started and need to pick our
@@ -77,12 +77,12 @@ public class SavingTheUniverse {
 					if(!possibleSearchEngine.equals(currentSearchEngine)) {
 						
 						// If the possibleSearchEngine doesn't appear in queryList, then distance will be set to -1 
-						int distance = queryList.indexOf(possibleSearchEngine, index);
-						distance = distance == -1 ? Integer.MAX_VALUE : distance;
+						int indexOfNextOccurance = queryList.indexOf(possibleSearchEngine, index);
+						indexOfNextOccurance = indexOfNextOccurance == -1 ? Integer.MAX_VALUE : indexOfNextOccurance;
 						
 						// If distance is greater than any seen so far, set maxDistanceFound and searchEnginePicked.
-						if(distance > maxDistanceFound) {
-							maxDistanceFound = distance;
+						if(indexOfNextOccurance > maxIndexFound) {
+							maxIndexFound = indexOfNextOccurance;
 							searchEnginePicked = possibleSearchEngine;
 						}
 					}
@@ -92,7 +92,7 @@ public class SavingTheUniverse {
 				currentSearchEngine = searchEnginePicked;
 				// Increase index to the position of searchEnginePicked. No reason to scan anything between
 				// index and the position of the searchEnginePicked as we know we won't be switching.
-				index =  maxDistanceFound == Integer.MAX_VALUE ? maxDistanceFound : index + maxDistanceFound;
+				index =  maxIndexFound;
 			}
 		}
 		
